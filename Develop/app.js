@@ -21,7 +21,7 @@ const managerQuestions=[
         type: "input",
         name: "name",
         message: "What is your manager's name?",
-        validate: response =>response.match(/^[A-Za-z]+$/)? true: "enter a valid name"
+        validate: response =>response.match(/^[A-Za-z ]+$/)? true: "enter a valid name"
 
       },
       {
@@ -42,7 +42,7 @@ const managerQuestions=[
         type: "input",
         name: "officeNumber",
         message: "What is your manager's office number?",
-        validate: response => response.match(/^[0-9]+$/)? true: "Your input should be a number!"
+        validate: response => response.match(/^[0-9-]+$/)? true: "Your input should be a number!"
 
       },
 ];
@@ -60,7 +60,7 @@ const internQuestions =[
         type: "input",
         name: "name",
         message: "What is your intern's name?",
-        validate: response =>response.match(/^[A-Za-z]+$/)? true: "enter a valid name"
+        validate: response =>response.match(/^[A-Za-z ]+$/)? true: "enter a valid name"
 
       },
       {
@@ -89,7 +89,7 @@ const engineerQuestions =[
         type: "input",
         name: "name",
         message: "What is your engineer's name?",
-        validate: response =>response.match(/^[A-Za-z]+$/)? true: "enter a valid name"
+        validate: response =>response.match(/^[A-Za-z ]+$/)? true: "enter a valid name"
       },
       {
         type: "input",
@@ -120,19 +120,10 @@ function managerPrompts (){
     inquirer
     .prompt(managerQuestions)
     .then(response => {
-        // const managerData = {
-        //   name: response.name,
-        //   id: response.id,
-        //   email: response.email,
-        //   role: "Manager",
-        //   officeNumber: response.officeNumber,
-        // };
-        // console.log(managerData);
-        //create manager object
+       
         let manager = new Manager(response.name, response.id, response.email, response.officeNumber) 
         team.push(manager);
         selectRole();
-        // return managerData;
       })
 }
 
@@ -142,17 +133,10 @@ function engineerPrompts (){
     inquirer
     .prompt(engineerQuestions)
     .then(response => {
-        // const engineerData = {
-        //   name: response.name,
-        //   id: response.id,
-        //   email: response.email,
-        //   role: "Engineer",
-        //   github: response.github,
-        // };
+       
         let engineer = new Engineer(response.name, response.id, response.email, response.github) 
         team.push(engineer);
         selectRole();
-        // return engineerData;
       })
 }
 
@@ -162,18 +146,10 @@ function internPrompts (){
     inquirer
     .prompt(internQuestions)
     .then(response => {
-        // const internData = {
-        //   name: response.name,
-        //   id: response.id,
-        //   email: response.email,
-        //   role: "Intern",
-        //   school: response.school,
-        // };
+        
         let intern = new Intern(response.name, response.id, response.email, response.school);
-        console.log(intern);
         team.push(intern);
         selectRole();
-        // return internData;
       })
 }
 
@@ -189,32 +165,19 @@ function selectRole (){
         } else if (response.role ==="Intern"){
             internPrompts();
         }  else if(response.role ==="I don't want to add any more team members"){
-            render(team);
+            buildTeam();
             console.log(team);
             
         }
     });
 }
 
+function buildTeam() {
+  // Create the output directory if the output path doesn't exist
+  if (!fs.existsSync(OUTPUT_DIR)) {
+    fs.mkdirSync(OUTPUT_DIR)
+  }
+  fs.writeFileSync(outputPath, render(team), "utf-8");
+}
 
 
-
-    
-
-//if choice 3 is selected create output folder with team html
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an 
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work!```

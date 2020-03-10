@@ -1,16 +1,11 @@
 const path = require("path");
 const fs = require("fs");
-// do I even need that? from here
-const app = require("../app");
-
-let employees = app.team;
-// to here?
 
 const templatesDir = path.resolve(__dirname, "../templates");
 
 const render = employees => {
   const html = [];
-  
+
   html.push(employees
     .filter(employee => employee.getRole() === "Manager")
     .map(manager => renderManager(manager))
@@ -23,7 +18,6 @@ const render = employees => {
     .filter(employee => employee.getRole() === "Intern")
     .map(intern => renderIntern(intern))
   );
-  console.log(html);//doesnt execute
 
   return renderMain(html.join(""));
 
@@ -61,11 +55,7 @@ const renderIntern = intern => {
 
 const renderMain = html => {
   const template = fs.readFileSync(path.resolve(templatesDir, "main.html"), "utf8");
-  const teamHTML = replacePlaceholders(template, "team", html);
-  const htmlFile = path.join(__dirname, "output", "team.html");
-  fs.writeFileSync(htmlFile, teamHTML);
-  console.log("Team was created!");
-  // return replacePlaceholders(template, "team", html);
+  return replacePlaceholders(template, "team", html);
 };
 
 const replacePlaceholders = (template, placeholder, value) => {
@@ -74,3 +64,4 @@ const replacePlaceholders = (template, placeholder, value) => {
 };
 
 module.exports = render;
+
