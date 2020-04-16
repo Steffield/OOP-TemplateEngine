@@ -159,14 +159,14 @@ function selectRole (){
     inquirer.prompt(memberQuestion)
     .then(response => {
         const member = {role: response.role};
-        console.log(member)
+        // console.log(member)
         if(response.role==="Engineer") {
             engineerPrompts();
         } else if (response.role ==="Intern"){
             internPrompts();
         }  else if(response.role ==="I don't want to add any more team members"){
             buildTeam();
-            console.log(team);
+            // console.log(team);
             
         }
     });
